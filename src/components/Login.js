@@ -52,6 +52,9 @@ const Login = () => {
       // Successful login
       console.log("User has successfully logged in.");
       localStorage.setItem("token", data.idToken);
+      localStorage.setItem("email", data.email);
+      localStorage.setItem("userId", data.localId);
+
 
       // Navigate to Welcome page
       history.push("/welcome");

@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import Signup from "./Signup";
+import Signup from "../components/Signup";
 
 describe("Signup Component", () => {
 
