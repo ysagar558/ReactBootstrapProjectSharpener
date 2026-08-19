@@ -1,0 +1,203 @@
+.login-page {
+  min-height: 100vh;
+  background-color: #fafafa;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Blue curved shape */
+
+.login-blue-shape {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  width: 47%;
+  height: 540px;
+
+  background-color: #0868f5;
+
+  border-bottom-left-radius: 75% 55%;
+  border-top-left-radius: 15% 8%;
+
+  z-index: 1;
+}
+
+/* Login container */
+
+.login-container {
+  position: relative;
+  z-index: 5;
+
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+}
+
+/* Login card */
+
+.login-card {
+  width: 310px;
+
+  background-color: white;
+
+  border: 1px solid #cfcfcf;
+
+  padding: 38px 20px 20px;
+
+  text-align: center;
+}
+
+.login-card h2 {
+  font-size: 27px;
+  font-weight: 400;
+
+  margin-bottom: 35px;
+}
+
+/* Input */
+
+.login-card .form-control {
+  height: 50px;
+
+  border-radius: 25px;
+
+  background-color: #000;
+  color: white;
+
+  border: none;
+
+  padding-left: 15px;
+}
+
+.login-card .form-control::placeholder {
+  color: #888;
+}
+
+.login-card .form-control:focus {
+  background-color: #000;
+  color: white;
+
+  box-shadow: none;
+}
+
+/* Password */
+
+.password-group {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+
+  right: 10px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  background: transparent;
+  border: none;
+
+  color: white;
+
+  font-size: 20px;
+
+  cursor: pointer;
+}
+
+/* Login button */
+
+.login-submit-button {
+  width: 100%;
+
+  height: 40px;
+
+  border-radius: 25px;
+
+  border: none;
+
+  background-color: #0798ed;
+
+  font-size: 16px;
+}
+
+.login-submit-button:hover {
+  background-color: #0787d5;
+}
+
+.login-submit-button:disabled {
+  opacity: 0.6;
+}
+
+/* Forgot password */
+
+.forgot-password {
+  display: block;
+
+  margin-top: 10px;
+
+  color: blue;
+
+  font-size: 16px;
+}
+
+/* Signup button */
+
+.signup-redirect-button {
+  width: 310px;
+
+  height: 42px;
+
+  margin-top: 16px;
+
+  border: 1px solid #5d6c66;
+
+  border-radius: 5px;
+
+  background-color: #e9f7f1;
+
+  color: #333;
+
+  font-size: 15px;
+}
+
+.signup-redirect-button:hover {
+  background-color: #d9eee7;
+
+  color: #222;
+}
+
+/* Alert */
+
+.login-alert {
+  font-size: 13px;
+  padding: 7px;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .login-blue-shape {
+    width: 60%;
+    height: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-blue-shape {
+    width: 75%;
+    height: 350px;
+  }
+
+  .login-card {
+    width: 90%;
+  }
+
+  .signup-redirect-button {
+    width: 90%;
+  }
+}

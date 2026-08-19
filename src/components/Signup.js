@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Container, Navbar, Nav, Form, Button, Alert } from "react-bootstrap";
+import {useHistory} from "react-router-dom";
 import "./Signup.css";
 
 const API_KEY = "AIzaSyB0e7Z_UOBldjUY0i1y3N4i8t_odTfBaog";
@@ -11,6 +12,8 @@ const Signup = () => {
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
+  const history=useHistory();
 
   const handleSubmit = async (e) => {
   e.preventDefault();
@@ -184,7 +187,7 @@ const Signup = () => {
         <Button
           className="login-button"
           variant="light"
-          href="/login"
+          onClick={()=>history.push("/login")}
         >
           Have an account? Login
         </Button>

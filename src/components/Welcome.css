@@ -1,0 +1,19 @@
+.welcome-page {
+  min-height: 100vh;
+
+  background-color: white;
+}
+
+.welcome-page h1 {
+  margin: 0;
+
+  padding: 25px 20px;
+
+  font-size: 25px;
+
+  font-weight: 400;
+
+  font-style: italic;
+
+  border-bottom: 1px solid #777;
+}
