@@ -1,0 +1,96 @@
+.compose-mail-page {
+    min-height: 100vh;
+    background-color: #ffffff;
+    padding: 0;
+}
+
+.compose-mail-container {
+    min-height: 100vh;
+    padding: 0 40px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Close */
+
+.close-section {
+    height: 30px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.close-button {
+    font-size: 30px;
+    color: #777;
+    cursor: pointer;
+}
+
+/* To and Subject */
+
+.mail-input-group {
+    margin-bottom: 0;
+    border-bottom: 1px solid #adb5bd;
+}
+
+.mail-input-group .form-control {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    height: 54px;
+    padding-left: 0;
+    font-size: 16px;
+}
+
+.mail-input-group .form-control:focus {
+    box-shadow: none;
+}
+
+/* Editor */
+
+.editor-container {
+    flex: 1;
+    min-height: 500px;
+    padding-top: 20px;
+}
+
+/* Editor writing area */
+
+.mail-editor {
+    min-height: 400px;
+    padding: 10px 0;
+    font-size: 16px;
+}
+
+/* Toolbar */
+
+.mail-toolbar {
+    border: none !important;
+    border-top: 1px solid #dee2e6 !important;
+    margin-top: auto !important;
+    padding-top: 15px !important;
+}
+
+/* Bottom area */
+
+.mail-footer {
+    padding: 15px 0;
+}
+
+.send-button {
+    width: 130px;
+    border-radius: 3px;
+    font-size: 16px;
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+    .compose-mail-container {
+        padding: 0 15px;
+    }
+
+    .editor-container {
+        min-height: 400px;
+    }
+}
