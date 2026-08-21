@@ -1,241 +1,238 @@
-import React, {
-  useState,
-  useEffect,
-} from "react";
-
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import {
   Container,
-  ListGroup,
+  Row,
+  Col,
+  Button,
   Spinner,
   Alert,
+  ListGroup,
 } from "react-bootstrap";
 
+import ComposeMail from "./ComposeMail";
 
 const FIREBASE_DATABASE_URL =
   "https://appointment-booking-syst-e0829-default-rtdb.firebaseio.com";
 
+  
 
 const Inbox = () => {
-
   const [mails, setMails] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const [loading, setLoading] =
-    useState(true);
+  const [showCompose, setShowCompose] = useState(false);
 
-  const [error, setError] =
-    useState("");
+  const userEmail = localStorage.getItem("email");
+  const token = localStorage.getItem("token");
 
+  const history=useHistory();
 
-  const email =
-    localStorage.getItem("email");
-
-  const token =
-    localStorage.getItem("token");
-
-
-  // IMPORTANT:
-  // Must be exactly the same as ComposeMail
+  // Use the SAME formatting function as ComposeMail
   const formatEmail = (email) => {
-    return email.replace(/[.#$[\]@]/g, "_");
+    return email
+      .trim()
+      .toLowerCase()
+      .replace(/[.#$[\]@]/g, "_");
   };
 
+  const getMails = async () => {
+    if (!userEmail) {
+      setError("User email not found. Please login again.");
+      return;
+    }
 
-  useEffect(() => {
+    setLoading(true);
+    setError("");
 
-    const fetchInbox = async () => {
+    try {
+      const formattedEmail = formatEmail(userEmail);
 
-      if (!email) {
-        setError(
-          "User email not found. Please login again."
-        );
+      const response = await fetch(
+        `${FIREBASE_DATABASE_URL}/mails/inbox/${formattedEmail}.json?auth=${token}`
+      );
 
-        setLoading(false);
+      if (!response.ok) {
+        throw new Error("Unable to fetch mails.");
+      }
 
+      const data = await response.json();
+
+      if (!data) {
+        setMails([]);
         return;
       }
 
-      try {
+      const loadedMails = Object.entries(data).map(
+        ([id, mail]) => ({
+          id,
+          ...mail,
+        })
+      );
 
-        const formattedEmail =
-          formatEmail(
-            email.trim().toLowerCase()
-          );
+      // Latest mail first
+      loadedMails.sort(
+        (a, b) =>
+          new Date(b.createdAt) -
+          new Date(a.createdAt)
+      );
 
-        const url =
-          `${FIREBASE_DATABASE_URL}/mails/inbox/${formattedEmail}.json?auth=${token}`;
+      setMails(loadedMails);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        console.log(
-          "Fetching inbox for:",
-          email
-        );
+  useEffect(() => {
+    getMails();
+  }, []);
 
-        console.log(
-          "Formatted Firebase key:",
-          formattedEmail
-        );
-
-        console.log(
-          "Firebase URL:",
-          url
-        );
-
-
-        const response =
-          await fetch(url);
-
-
-        if (!response.ok) {
-
-          const errorData =
-            await response.json();
-
-          console.log(
-            "Firebase Error:",
-            errorData
-          );
-
-          throw new Error(
-            errorData.error ||
-            "Failed to fetch mails."
-          );
-        }
-
-
-        const data =
-          await response.json();
-
-        console.log(
-          "Inbox data from Firebase:",
-          data
-        );
-
-
-        if (data) {
-
-          const loadedMails =
-            Object.entries(data).map(
-              ([id, mail]) => {
-
-                return {
-                  id,
-                  ...mail,
-                };
-
-              }
-            );
-
-          setMails(loadedMails);
-
-        } else {
-
-          setMails([]);
-
-        }
-
-      } catch (error) {
-
-        console.log(
-          "Error fetching inbox:",
-          error
-        );
-
-        setError(error.message);
-
-      } finally {
-
-        setLoading(false);
-
-      }
-
-    };
-
-
-    fetchInbox();
-
-  }, [email, token]);
-
-
-  if (loading) {
-
+  // Show ComposeMail when Compose is clicked
+  if (showCompose) {
     return (
+      <Container fluid>
+        <Row>
+          <Col md={2} className="p-3 border-end">
+            <Button
+              variant="primary"
+              className="w-100"
+              onClick={() => {
+                setShowCompose(false);
+                getMails();
+              }}
+            >
+              Inbox
+            </Button>
+          </Col>
 
-      <div className="text-center mt-5">
-
-        <Spinner animation="border" />
-
-      </div>
-
+          <Col md={10}>
+            <ComposeMail />
+          </Col>
+        </Row>
+      </Container>
     );
-
   }
 
-
   return (
-
-    <Container className="mt-4">
-
-      <h2>Inbox</h2>
-
-
-      {error && (
-
-        <Alert variant="danger">
-
-          {error}
-
-        </Alert>
-
-      )}
-
-
-      {!error && mails.length === 0 && (
-
-        <Alert variant="info">
-
-          No mails found.
-
-        </Alert>
-
-      )}
-
-
-      <ListGroup>
-
-        {mails.map((mail) => (
-
-          <ListGroup.Item
-            key={mail.id}
+    <Container fluid>
+      <Row>
+        {/* Sidebar */}
+        <Col
+          md={2}
+          className="min-vh-100 border-end p-3"
+        >
+          <Button
+            variant="primary"
+            className="w-100 mb-3"
+            onClick={() => setShowCompose(true)}
           >
+            Compose
+          </Button>
 
-            <strong>
-              From: {mail.from}
-            </strong>
+          <ListGroup variant="flush">
+            <ListGroup.Item active>
+              Inbox
+            </ListGroup.Item>
 
-            <br />
+            <ListGroup.Item action>
+              Unread
+            </ListGroup.Item>
 
-            <strong>
-              Subject: {mail.subject}
-            </strong>
+            <ListGroup.Item action>
+              Starred
+            </ListGroup.Item>
 
-            <br />
+            <ListGroup.Item action onClick={()=>{history.push("/sent")}}>
+              Sent
+            </ListGroup.Item>
 
-            <span>
+            <ListGroup.Item action>
+              Archive
+            </ListGroup.Item>
 
-              {mail.bodyPreview}
+            <ListGroup.Item action>
+              Spam
+            </ListGroup.Item>
+          </ListGroup>
+        </Col>
 
-            </span>
+        {/* Main Mail Area */}
+        <Col md={10} className="p-4">
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <h2>Inbox</h2>
 
-          </ListGroup.Item>
+            <Button
+              variant="outline-primary"
+              onClick={getMails}
+            >
+              Refresh
+            </Button>
+          </div>
 
-        ))}
+          {error && (
+            <Alert variant="danger">
+              {error}
+            </Alert>
+          )}
 
-      </ListGroup>
+          {loading && (
+            <div className="text-center mt-5">
+              <Spinner animation="border" />
+            </div>
+          )}
 
+          {!loading && mails.length === 0 && (
+            <Alert variant="secondary">
+              No mails found.
+            </Alert>
+          )}
+
+          {!loading && mails.length > 0 && (
+            <ListGroup>
+              {mails.map((mail) => (
+                <ListGroup.Item
+                  key={mail.id}
+                  className="mb-1"
+                >
+                  <Row>
+                    <Col md={3}>
+                      <strong>
+                        {mail.from}
+                      </strong>
+                    </Col>
+
+                    <Col md={7}>
+                      <strong>
+                        {mail.subject}
+                      </strong>
+
+                      <span className="ms-2 text-muted">
+                        {mail.bodyPreview}
+                      </span>
+                    </Col>
+
+                    <Col
+                      md={2}
+                      className="text-end text-muted"
+                    >
+                      {mail.createdAt
+                        ? new Date(
+                          mail.createdAt
+                        ).toLocaleString()
+                        : ""}
+                    </Col>
+                  </Row>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          )}
+        </Col>
+      </Row>
     </Container>
-
   );
-
 };
-
 
 export default Inbox;

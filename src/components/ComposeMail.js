@@ -25,9 +25,18 @@ const ComposeMail = () => {
 
     // IMPORTANT:
     // Use this same function in ComposeMail and Inbox
+
     const formatEmail = (email) => {
-        return email.replace(/[.#$[\]@]/g, "_");
+        return email
+            .trim()
+            .toLowerCase()
+            .replace(/[.#$[\]@]/g, "_");
     };
+
+
+    // const formatEmail = (email) => {
+    //     return email.replace(/[.#$[\]@]/g, "_");
+    // };
 
     const handleSendMail = async () => {
         setError("");

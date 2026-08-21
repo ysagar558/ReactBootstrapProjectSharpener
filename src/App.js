@@ -23,20 +23,20 @@ function App() {
         </Route>
 
         <Route exact path="/welcome">
-          <ComposeMail />
+          <Inbox />
         </Route>
 
         <Route exact path="/">
           <Signup />
         </Route>
 
-        {/* <Route exact path="/compose">
+        <Route exact path="/compose">
           <ComposeMail />
-        </Route> */}
-
-        <Route exact path="/inbox">
-          <Inbox />
         </Route>
+
+        {/* <Route exact path="/inbox">
+          <Inbox />
+        </Route> */}
 
         <Route exact path="/sent">
           <Sent />

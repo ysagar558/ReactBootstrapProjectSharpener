@@ -1,0 +1,66 @@
+.mail-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 52px;
+    border-bottom: 1px solid #ddd;
+    padding: 0 15px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.mail-row:hover {
+    background-color: #f5f5f5;
+}
+
+.mail-checkbox {
+    margin-right: 15px;
+}
+
+.mail-dot {
+    color: #0d6efd;
+    font-size: 12px;
+    margin-right: 15px;
+}
+
+.mail-receiver {
+    width: 220px;
+    min-width: 220px;
+    font-weight: 600;
+    margin-right: 20px;
+}
+
+.mail-subject {
+    width: 300px;
+    min-width: 300px;
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.mail-preview {
+    flex: 1;
+    color: #6c757d;
+    margin-right: 20px;
+}
+
+.mail-date {
+    width: 100px;
+    min-width: 100px;
+    text-align: right;
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.sidebar-item {
+    padding: 10px 12px;
+    cursor: pointer;
+}
+
+.sidebar-item:hover {
+    background-color: #f1f3f5;
+}
+
+.active-sidebar {
+    background-color: #cfe2ff;
+    font-weight: bold;
+}
