@@ -6,11 +6,10 @@ import {
   Button,
   Spinner,
   Alert,
+  Badge,
 } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
-import Inbox from "./Inbox";
-import ComposeMail from "./ComposeMail";
-import "./Sent.css";
+import "./Mail.css";
 
 const FIREBASE_DATABASE_URL =
   "https://appointment-booking-syst-e0829-default-rtdb.firebaseio.com";
@@ -34,7 +33,7 @@ const Sent = () => {
 
   const getSentMails = async () => {
     if (!senderEmail) {
-      setError("User email not found. Please login again.");
+      setError("User email not found.");
       return;
     }
 
@@ -68,8 +67,7 @@ const Sent = () => {
 
       loadedMails.sort(
         (a, b) =>
-          new Date(b.createdAt) -
-          new Date(a.createdAt)
+          new Date(b.createdAt) - new Date(a.createdAt)
       );
 
       setMails(loadedMails);
@@ -84,14 +82,22 @@ const Sent = () => {
     getSentMails();
   }, []);
 
+  // Count unread mails
+  const unreadCount = mails.filter(
+    (mail) => mail.read === false
+  ).length;
+
+  localStorage.setItem("unreadcount",unreadCount);
+
+  const openMail = (mail) => {
+    history.push(`/mail/sent/${mail.id}`);
+  };
+
   return (
     <Container fluid>
       <Row>
         {/* Sidebar */}
-        <Col
-          md={2}
-          className="min-vh-100 border-end p-3"
-        >
+        <Col md={2} className="sidebar p-3">
           <Button
             className="w-100 mb-3"
             onClick={() => history.push("/compose")}
@@ -103,21 +109,32 @@ const Sent = () => {
             className="sidebar-item"
             onClick={() => history.push("/welcome")}
           >
-            Inbox
+            <span>Inbox</span>
           </div>
 
-          <div className="sidebar-item">
-            Unread
+          <div
+            className="sidebar-item"
+          >
+            <span>Unread</span>
           </div>
 
-          <div className="sidebar-item">
-            Starred
+          <div
+            className="sidebar-item"
+          >
+            <span>Starred</span>
           </div>
 
           <div
             className="sidebar-item active-sidebar"
+            onClick={() => history.push("/sent")}
           >
-            Sent
+            <span>Sent</span>
+
+            {unreadCount > 0 && (
+            <Badge bg="secondary" pill>
+                {unreadCount}
+              </Badge>
+            )}
           </div>
 
           <div className="sidebar-item">
@@ -127,16 +144,21 @@ const Sent = () => {
           <div className="sidebar-item">
             Spam
           </div>
+
+          <div className="sidebar-item">
+            Drafts
+          </div>
+
+          
         </Col>
 
         {/* Main Content */}
-        <Col md={10} className="p-3">
-          <div className="d-flex justify-content-between mb-3">
-            <h4>Sent</h4>
+        <Col md={10} className="p-4">
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h2>Sent</h2>
 
             <Button
               variant="outline-primary"
-              size="sm"
               onClick={getSentMails}
             >
               Refresh
@@ -150,7 +172,7 @@ const Sent = () => {
           )}
 
           {loading && (
-            <div className="text-center mt-5">
+            <div className="text-center">
               <Spinner animation="border" />
             </div>
           )}
@@ -164,36 +186,34 @@ const Sent = () => {
           {!loading &&
             mails.map((mail) => (
               <div
-                className="mail-row"
                 key={mail.id}
+                className="mail-row"
+                onClick={() => openMail(mail)}
               >
-                {/* Checkbox */}
                 <input
                   type="checkbox"
-                  className="mail-checkbox"
+                  onClick={(e) => e.stopPropagation()}
                 />
 
-                {/* Unread dot / icon */}
-                <span className="mail-dot">
-                  ●
-                </span>
+                {/* Blue dot */}
+                {!mail.read && (
+                  <span className="blue-dot">
+                    ●
+                  </span>
+                )}
 
-                {/* Receiver */}
-                <div className="mail-receiver text-truncate">
+                <div className="mail-sender text-truncate">
                   {mail.to}
                 </div>
 
-                {/* Subject */}
                 <div className="mail-subject text-truncate">
                   {mail.subject}
                 </div>
 
-                {/* Message Preview */}
                 <div className="mail-preview text-truncate">
                   {mail.bodyPreview}
                 </div>
 
-                {/* Date */}
                 <div className="mail-date">
                   {mail.createdAt
                     ? new Date(

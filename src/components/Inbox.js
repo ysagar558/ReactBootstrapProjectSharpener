@@ -8,6 +8,7 @@ import {
   Spinner,
   Alert,
   ListGroup,
+  Badge,
 } from "react-bootstrap";
 
 import ComposeMail from "./ComposeMail";
@@ -15,9 +16,9 @@ import ComposeMail from "./ComposeMail";
 const FIREBASE_DATABASE_URL =
   "https://appointment-booking-syst-e0829-default-rtdb.firebaseio.com";
 
-  
 
-const Inbox = () => {
+
+const Inbox = (props) => {
   const [mails, setMails] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -27,7 +28,7 @@ const Inbox = () => {
   const userEmail = localStorage.getItem("email");
   const token = localStorage.getItem("token");
 
-  const history=useHistory();
+  const history = useHistory();
 
   // Use the SAME formatting function as ComposeMail
   const formatEmail = (email) => {
@@ -36,6 +37,12 @@ const Inbox = () => {
       .toLowerCase()
       .replace(/[.#$[\]@]/g, "_");
   };
+
+  const unreadCount = mails.filter(
+    (mail) => mail.read === false
+  ).length;
+
+  const sentUnreadCount = localStorage.getItem("unreadcount");
 
   const getMails = async () => {
     if (!userEmail) {
@@ -134,7 +141,11 @@ const Inbox = () => {
 
           <ListGroup variant="flush">
             <ListGroup.Item active>
-              Inbox
+              <span>Inbox</span>
+
+              {unreadCount>0 && (<Badge bg="secondary" pill>
+                {unreadCount}
+              </Badge>)}
             </ListGroup.Item>
 
             <ListGroup.Item action>
@@ -145,8 +156,16 @@ const Inbox = () => {
               Starred
             </ListGroup.Item>
 
-            <ListGroup.Item action onClick={()=>{history.push("/sent")}}>
-              Sent
+            <ListGroup.Item action onClick={() => { history.push("/sent") }}>
+              <span>Sent</span>
+
+              {sentUnreadCount > 0 && (
+                <Badge bg="secondary" pill>
+                  {sentUnreadCount}
+                </Badge>
+              )}
+
+
             </ListGroup.Item>
 
             <ListGroup.Item action>

@@ -8,6 +8,7 @@ import Welcome from "./components/Welcome";
 import ComposeMail from "./components/ComposeMail";
 import Inbox from "./components/Inbox";
 import Sent from "./components/Sent";
+import MailDetails from "./components/MailDetails";
 
 function App() {
   return (
@@ -38,9 +39,15 @@ function App() {
           <Inbox />
         </Route> */}
 
+        
         <Route exact path="/sent">
           <Sent />
         </Route>
+
+        <Route path="/mail/:folder/:mailId" exact>
+          <MailDetails />
+        </Route>
+
 
       </Switch>
     </Router>
