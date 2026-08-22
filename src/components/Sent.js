@@ -87,7 +87,7 @@ const Sent = () => {
     (mail) => mail.read === false
   ).length;
 
-  localStorage.setItem("unreadcount",unreadCount);
+  localStorage.setItem("unreadcount", unreadCount);
 
   const openMail = (mail) => {
     history.push(`/mail/sent/${mail.id}`);
@@ -131,7 +131,7 @@ const Sent = () => {
             <span>Sent</span>
 
             {unreadCount > 0 && (
-            <Badge bg="secondary" pill>
+              <Badge bg="secondary" pill>
                 {unreadCount}
               </Badge>
             )}
@@ -149,7 +149,7 @@ const Sent = () => {
             Drafts
           </div>
 
-          
+
         </Col>
 
         {/* Main Content */}
@@ -196,8 +196,17 @@ const Sent = () => {
                 />
 
                 {/* Blue dot */}
-                {!mail.read && (
+                {/* {!mail.read && (
                   <span className="blue-dot">
+                    ●
+                  </span>
+                )} */}
+
+                {!mail.read && (
+                  <span
+                    className="blue-dot"
+                    data-testid={`blue-dot-${mail.id}`}
+                  >
                     ●
                   </span>
                 )}
